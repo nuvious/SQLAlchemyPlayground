@@ -1,0 +1,41 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  mariadb_demo:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: sqlalchemy
+    ports:
+      - "3308:3306"
+  mysql_demo:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: sqlalchemy
+    ports:
+      - "3307:3306"
+  postgres_demo:
+    image: postgres:10
+    environment:
+      - POSTGRES_USER=sqlalchemy
+      - POSTGRES_PASSWORD=sqlalchemy
+    logging:
+      options:
+        max-size: 10m
+        max-file: "3"
+    ports:
+      - "5432:5432"
+  demo:
+    build: 
+      context: ./SQLPlayground
+      dockerfile: Dockerfile
+    volumes:
+      - ./data/pmlb_cache:/var/pmlb_cache
+      - ./data/output:/var/output
+    depends_on:
+      - postgres_demo
+      - mysql_demo
+      - mariadb_demo
+    links:
+      - postgres_demo
+      - mysql_demo
+      - mariadb_demo

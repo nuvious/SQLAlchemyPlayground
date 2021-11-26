@@ -1,0 +1,2 @@
+dbstring: "mysql+mysqldb://root:sqlalchemy@mariadb_demo:3308/sqlalchemy"
+flavor: mysql
